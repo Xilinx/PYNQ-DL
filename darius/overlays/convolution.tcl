@@ -47,7 +47,7 @@ if { $list_projs eq "" } {
    set_property BOARD_PART xilinx.com:zc702:part0:1.2 [current_project]
 }
 
-set_property  ip_repo_paths  ../../xilinx.com_user_cnn_dataflow_v1_0_1.0 [current_project]
+set_property  ip_repo_paths  ../ip/cnn_dataflow_1.0 [current_project]
 update_ip_catalog
 
 # CHANGE DESIGN NAME HERE
