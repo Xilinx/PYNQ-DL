@@ -1,5 +1,5 @@
-# Darius
-## Xilinx CNN IP
+# PYNQ-DL
+## Xilinx Deep Learning IP
 
 Quick Start
 On the latest PYNQ image, use the following command in a terminal to install Darius
