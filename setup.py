@@ -52,7 +52,7 @@ def install_packages():
 # Notebook delivery
 def fill_notebooks():
     src_nb = GIT_DIR + '/notebooks'
-    dst_nb_dir = '/home/xilinx/jupyter_notebooks/darius'
+    dst_nb_dir = '/home/xilinx/jupyter_notebooks/pynqDL'
     if os.path.exists(dst_nb_dir):
         shutil.rmtree(dst_nb_dir)
     shutil.copytree(src_nb, dst_nb_dir)
@@ -63,7 +63,7 @@ def fill_notebooks():
 # Images delivery
 def fill_images():
     src_nb = GIT_DIR + '/images'
-    dst_nb_dir = '/home/xilinx/jupyter_notebooks/darius/images'
+    dst_nb_dir = '/home/xilinx/jupyter_notebooks/pynqDL/images'
     if os.path.exists(dst_nb_dir):
         shutil.rmtree(dst_nb_dir)
     shutil.copytree(src_nb, dst_nb_dir)
@@ -72,7 +72,7 @@ def fill_images():
 
 
 # Overlays delivery
-def fill_overlays():
+def fill_overlays_darius():
     src_nb = GIT_DIR + '/darius/overlays'
     dst_nb_dir = '/home/xilinx/pynq/overlays/darius'
     if os.path.exists(dst_nb_dir):
@@ -81,6 +81,15 @@ def fill_overlays():
 
     print("Filling overlays done ...")
 
+    # Overlays delivery
+def fill_overlays_resize():
+    src_nb = GIT_DIR + '/resize/overlays'
+    dst_nb_dir = '/home/xilinx/pynq/overlays/resize'
+    if os.path.exists(dst_nb_dir):
+        shutil.rmtree(dst_nb_dir)
+    shutil.copytree(src_nb, dst_nb_dir)
+
+    print("Filling overlays done ...")
 
 # Overlays delivery
 def fill_lib():
@@ -97,7 +106,8 @@ if len(sys.argv) > 1 and sys.argv[1] == 'install':
     install_packages()
     fill_notebooks()
     fill_images()
-    fill_overlays()
+    fill_overlays_darius()
+    fill_overlays_resize()
     fill_lib()
 
 
@@ -109,16 +119,16 @@ def package_files(directory):
     return paths
 
 
-extra_files = package_files('darius')
+extra_files = package_files('pynqDL')
 
-setup(name='darius',
+setup(name='pynqDL',
       version='1.0',
-      description='Convolution IP using PYNQ package',
+      description='Xilinx Deep Learning IP using PYNQ Framework',
       author='Xilinx',
       author_email='npurusho@xilinx.com',
-      url='https://github.com/npurusho/Darius.git',
+      url='https://github.com/Xilinx/PYNQ-DL.git',
       packages=find_packages(),
-      download_url='https://github.com/npurusho/Darius.git',
+      download_url='https://github.com/Xilinx/PYNQ-DL.git',
       package_data={
           '': extra_files,
       }
