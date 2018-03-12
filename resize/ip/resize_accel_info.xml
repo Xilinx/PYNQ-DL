@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+  <core name="" type="" target="">
+    <kernel name="resize_accel" language="c" vlnv="xilinx.com:hls:resize_accel:1.0" attributes="" hash="" preferredWorkGroupSizeMultiple="0" workGroupSize="1" debug="false">
+      <port name="S_AXI_AXILITES" mode="slave" range="0x1000" dataWidth="32" portType="addressable" base="0x00000000"/>
+      <arg name="src_rows" addressQualifier="0" id="0" port="S_AXI_AXILITES" size="0x4" offset="0x10" hostOffset="0x0" hostSize="0x4" type="int"/>
+      <arg name="src_cols" addressQualifier="0" id="1" port="S_AXI_AXILITES" size="0x4" offset="0x18" hostOffset="0x0" hostSize="0x4" type="int"/>
+      <arg name="dst_rows" addressQualifier="0" id="2" port="S_AXI_AXILITES" size="0x4" offset="0x20" hostOffset="0x0" hostSize="0x4" type="int"/>
+      <arg name="dst_cols" addressQualifier="0" id="3" port="S_AXI_AXILITES" size="0x4" offset="0x28" hostOffset="0x0" hostSize="0x4" type="int"/>
+      <compileWorkGroupSize x="1" y="1" z="1"/>
+    </kernel>
+  </core>
+</project>
