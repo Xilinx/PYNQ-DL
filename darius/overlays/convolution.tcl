@@ -43,8 +43,8 @@ if { [string first $scripts_vivado_version $current_vivado_version] == -1 } {
 
 set list_projs [get_projects -quiet]
 if { $list_projs eq "" } {
-   create_project convolution convolution -part xc7z020clg484-1
-   set_property BOARD_PART xilinx.com:zc702:part0:1.2 [current_project]
+   create_project convolution convolution -part xc7z020clg400-1
+#   set_property BOARD_PART xilinx.com:zc702:part0:1.2 [current_project]
 }
 
 set_property  ip_repo_paths  ../ip/cnn_dataflow_1.0 [current_project]
@@ -195,13 +195,13 @@ proc create_root_design { parentCell } {
   # Create interface ports
   set DDR [ create_bd_intf_port -mode Master -vlnv xilinx.com:interface:ddrx_rtl:1.0 DDR ]
   set FIXED_IO [ create_bd_intf_port -mode Master -vlnv xilinx.com:display_processing_system7:fixedio_rtl:1.0 FIXED_IO ]
-  set leds_4bits [ create_bd_intf_port -mode Master -vlnv xilinx.com:interface:gpio_rtl:1.0 leds_4bits ]
+#  set leds_4bits [ create_bd_intf_port -mode Master -vlnv xilinx.com:interface:gpio_rtl:1.0 leds_4bits ]
 
   # Create ports
 
   # Create instance: axi_gpio_0, and set properties
   set axi_gpio_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_gpio:2.0 axi_gpio_0 ]
-  set_property -dict [ list \
+#  set_property -dict [ list \
    CONFIG.C_ALL_OUTPUTS {1} \
    CONFIG.C_GPIO_WIDTH {4} \
    CONFIG.GPIO_BOARD_INTERFACE {leds_4bits} \
@@ -209,11 +209,17 @@ proc create_root_design { parentCell } {
  ] $axi_gpio_0
 
   # Create instance: axi_interconnect_0, and set properties
-  set axi_interconnect_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_interconnect_0 ]
-  set_property -dict [ list \
+#  set axi_interconnect_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_interconnect_0 ]
+#  set_property -dict [ list \
    CONFIG.NUM_MI {1} \
    CONFIG.NUM_SI {4} \
  ] $axi_interconnect_0
+ 
+  # Create instance: smartconnect_0, and set properties
+  set smartconnect_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:smartconnect:1.0 smartconnect_0 ]
+  set_property -dict [ list \
+   CONFIG.NUM_SI {4} \
+ ] $smartconnect_0 
 
   # Create instance: cnn_dataflow_v1_0_0, and set properties
   set cnn_dataflow_v1_0_0 [ create_bd_cell -type ip -vlnv xilinx.com:user:cnn_dataflow_v1_0:1.0 cnn_dataflow_v1_0_0 ]
@@ -670,7 +676,7 @@ proc create_root_design { parentCell } {
  ] $processing_system7_0
 
   # Create instance: ps7_0_axi_periph, and set properties
-  set ps7_0_axi_periph [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 ps7_0_axi_periph ]
+  set ps7_0_axi_periph [ create_bd_cell -type ip -vlnv xilinx.com:ip:smartconnect:1.0 ps7_0_axi_periph ]
   set_property -dict [ list \
    CONFIG.NUM_MI {2} \
  ] $ps7_0_axi_periph
@@ -679,12 +685,12 @@ proc create_root_design { parentCell } {
   set rst_ps7_0_50M [ create_bd_cell -type ip -vlnv xilinx.com:ip:proc_sys_reset:5.0 rst_ps7_0_50M ]
 
   # Create interface connections
-  connect_bd_intf_net -intf_net axi_gpio_0_GPIO [get_bd_intf_ports leds_4bits] [get_bd_intf_pins axi_gpio_0/GPIO]
-  connect_bd_intf_net -intf_net axi_interconnect_0_M00_AXI [get_bd_intf_pins axi_interconnect_0/M00_AXI] [get_bd_intf_pins processing_system7_0/S_AXI_HP0]
-  connect_bd_intf_net -intf_net cnn_dataflow_v1_0_0_m_axi_cmd [get_bd_intf_pins axi_interconnect_0/S03_AXI] [get_bd_intf_pins cnn_dataflow_v1_0_0/m_axi_cmd]
-  connect_bd_intf_net -intf_net cnn_dataflow_v1_0_0_m_axi_ifm [get_bd_intf_pins axi_interconnect_0/S00_AXI] [get_bd_intf_pins cnn_dataflow_v1_0_0/m_axi_ifm]
-  connect_bd_intf_net -intf_net cnn_dataflow_v1_0_0_m_axi_ofm [get_bd_intf_pins axi_interconnect_0/S01_AXI] [get_bd_intf_pins cnn_dataflow_v1_0_0/m_axi_ofm]
-  connect_bd_intf_net -intf_net cnn_dataflow_v1_0_0_m_axi_weight [get_bd_intf_pins axi_interconnect_0/S02_AXI] [get_bd_intf_pins cnn_dataflow_v1_0_0/m_axi_weight]
+#  connect_bd_intf_net -intf_net axi_gpio_0_GPIO [get_bd_intf_ports leds_4bits] [get_bd_intf_pins axi_gpio_0/GPIO]
+  connect_bd_intf_net -intf_net smartconnect_0_M00_AXI [get_bd_intf_pins smartconnect_0/M00_AXI] [get_bd_intf_pins processing_system7_0/S_AXI_HP0]
+  connect_bd_intf_net -intf_net cnn_dataflow_v1_0_0_m_axi_cmd [get_bd_intf_pins smartconnect_0/S03_AXI] [get_bd_intf_pins cnn_dataflow_v1_0_0/m_axi_cmd]
+  connect_bd_intf_net -intf_net cnn_dataflow_v1_0_0_m_axi_ifm [get_bd_intf_pins smartconnect_0/S00_AXI] [get_bd_intf_pins cnn_dataflow_v1_0_0/m_axi_ifm]
+  connect_bd_intf_net -intf_net cnn_dataflow_v1_0_0_m_axi_ofm [get_bd_intf_pins smartconnect_0/S01_AXI] [get_bd_intf_pins cnn_dataflow_v1_0_0/m_axi_ofm]
+  connect_bd_intf_net -intf_net cnn_dataflow_v1_0_0_m_axi_weight [get_bd_intf_pins smartconnect_0/S02_AXI] [get_bd_intf_pins cnn_dataflow_v1_0_0/m_axi_weight]
   connect_bd_intf_net -intf_net processing_system7_0_DDR [get_bd_intf_ports DDR] [get_bd_intf_pins processing_system7_0/DDR]
   connect_bd_intf_net -intf_net processing_system7_0_FIXED_IO [get_bd_intf_ports FIXED_IO] [get_bd_intf_pins processing_system7_0/FIXED_IO]
   connect_bd_intf_net -intf_net processing_system7_0_M_AXI_GP0 [get_bd_intf_pins processing_system7_0/M_AXI_GP0] [get_bd_intf_pins ps7_0_axi_periph/S00_AXI]
@@ -692,10 +698,10 @@ proc create_root_design { parentCell } {
   connect_bd_intf_net -intf_net ps7_0_axi_periph_M01_AXI [get_bd_intf_pins axi_gpio_0/S_AXI] [get_bd_intf_pins ps7_0_axi_periph/M01_AXI]
 
   # Create port connections
-  connect_bd_net -net processing_system7_0_FCLK_CLK0 [get_bd_pins axi_gpio_0/s_axi_aclk] [get_bd_pins axi_interconnect_0/ACLK] [get_bd_pins axi_interconnect_0/M00_ACLK] [get_bd_pins axi_interconnect_0/S00_ACLK] [get_bd_pins axi_interconnect_0/S01_ACLK] [get_bd_pins axi_interconnect_0/S02_ACLK] [get_bd_pins axi_interconnect_0/S03_ACLK] [get_bd_pins cnn_dataflow_v1_0_0/i_clk] [get_bd_pins cnn_dataflow_v1_0_0/m_axi_cmd_aclk] [get_bd_pins cnn_dataflow_v1_0_0/m_axi_ifm_aclk] [get_bd_pins cnn_dataflow_v1_0_0/m_axi_ofm_aclk] [get_bd_pins cnn_dataflow_v1_0_0/m_axi_weight_aclk] [get_bd_pins cnn_dataflow_v1_0_0/s_axi_control_aclk] [get_bd_pins processing_system7_0/FCLK_CLK0] [get_bd_pins processing_system7_0/M_AXI_GP0_ACLK] [get_bd_pins processing_system7_0/S_AXI_HP0_ACLK] [get_bd_pins ps7_0_axi_periph/ACLK] [get_bd_pins ps7_0_axi_periph/M00_ACLK] [get_bd_pins ps7_0_axi_periph/M01_ACLK] [get_bd_pins ps7_0_axi_periph/S00_ACLK] [get_bd_pins rst_ps7_0_50M/slowest_sync_clk]
+  connect_bd_net -net processing_system7_0_FCLK_CLK0 [get_bd_pins axi_gpio_0/s_axi_aclk] [get_bd_pins smartconnect_0/ACLK] [get_bd_pins smartconnect_0/M00_ACLK] [get_bd_pins smartconnect_0/S00_ACLK] [get_bd_pins smartconnect_0/S01_ACLK] [get_bd_pins smartconnect_0/S02_ACLK] [get_bd_pins smartconnect_0/S03_ACLK] [get_bd_pins cnn_dataflow_v1_0_0/i_clk] [get_bd_pins cnn_dataflow_v1_0_0/m_axi_cmd_aclk] [get_bd_pins cnn_dataflow_v1_0_0/m_axi_ifm_aclk] [get_bd_pins cnn_dataflow_v1_0_0/m_axi_ofm_aclk] [get_bd_pins cnn_dataflow_v1_0_0/m_axi_weight_aclk] [get_bd_pins cnn_dataflow_v1_0_0/s_axi_control_aclk] [get_bd_pins processing_system7_0/FCLK_CLK0] [get_bd_pins processing_system7_0/M_AXI_GP0_ACLK] [get_bd_pins processing_system7_0/S_AXI_HP0_ACLK] [get_bd_pins ps7_0_axi_periph/ACLK] [get_bd_pins ps7_0_axi_periph/M00_ACLK] [get_bd_pins ps7_0_axi_periph/M01_ACLK] [get_bd_pins ps7_0_axi_periph/S00_ACLK] [get_bd_pins rst_ps7_0_50M/slowest_sync_clk]
   connect_bd_net -net processing_system7_0_FCLK_RESET0_N [get_bd_pins processing_system7_0/FCLK_RESET0_N] [get_bd_pins rst_ps7_0_50M/ext_reset_in]
-  connect_bd_net -net rst_ps7_0_50M_interconnect_aresetn [get_bd_pins axi_interconnect_0/ARESETN] [get_bd_pins ps7_0_axi_periph/ARESETN] [get_bd_pins rst_ps7_0_50M/interconnect_aresetn]
-  connect_bd_net -net rst_ps7_0_50M_peripheral_aresetn [get_bd_pins axi_gpio_0/s_axi_aresetn] [get_bd_pins axi_interconnect_0/M00_ARESETN] [get_bd_pins axi_interconnect_0/S00_ARESETN] [get_bd_pins axi_interconnect_0/S01_ARESETN] [get_bd_pins axi_interconnect_0/S02_ARESETN] [get_bd_pins axi_interconnect_0/S03_ARESETN] [get_bd_pins cnn_dataflow_v1_0_0/i_rst_n] [get_bd_pins cnn_dataflow_v1_0_0/m_axi_cmd_aresetn] [get_bd_pins cnn_dataflow_v1_0_0/m_axi_ifm_aresetn] [get_bd_pins cnn_dataflow_v1_0_0/m_axi_ofm_aresetn] [get_bd_pins cnn_dataflow_v1_0_0/m_axi_weight_aresetn] [get_bd_pins cnn_dataflow_v1_0_0/s_axi_control_aresetn] [get_bd_pins ps7_0_axi_periph/M00_ARESETN] [get_bd_pins ps7_0_axi_periph/M01_ARESETN] [get_bd_pins ps7_0_axi_periph/S00_ARESETN] [get_bd_pins rst_ps7_0_50M/peripheral_aresetn]
+  connect_bd_net -net rst_ps7_0_50M_interconnect_aresetn [get_bd_pins smartconnect_0/ARESETN] [get_bd_pins ps7_0_axi_periph/ARESETN] [get_bd_pins rst_ps7_0_50M/interconnect_aresetn]
+  connect_bd_net -net rst_ps7_0_50M_peripheral_aresetn [get_bd_pins axi_gpio_0/s_axi_aresetn] [get_bd_pins smartconnect_0/M00_ARESETN] [get_bd_pins smartconnect_0/S00_ARESETN] [get_bd_pins smartconnect_0/S01_ARESETN] [get_bd_pins smartconnect_0/S02_ARESETN] [get_bd_pins smartconnect_0/S03_ARESETN] [get_bd_pins cnn_dataflow_v1_0_0/i_rst_n] [get_bd_pins cnn_dataflow_v1_0_0/m_axi_cmd_aresetn] [get_bd_pins cnn_dataflow_v1_0_0/m_axi_ifm_aresetn] [get_bd_pins cnn_dataflow_v1_0_0/m_axi_ofm_aresetn] [get_bd_pins cnn_dataflow_v1_0_0/m_axi_weight_aresetn] [get_bd_pins cnn_dataflow_v1_0_0/s_axi_control_aresetn] [get_bd_pins ps7_0_axi_periph/M00_ARESETN] [get_bd_pins ps7_0_axi_periph/M01_ARESETN] [get_bd_pins ps7_0_axi_periph/S00_ARESETN] [get_bd_pins rst_ps7_0_50M/peripheral_aresetn]
 
   # Create address segments
   create_bd_addr_seg -range 0x40000000 -offset 0x00000000 [get_bd_addr_spaces cnn_dataflow_v1_0_0/m_axi_cmd] [get_bd_addr_segs processing_system7_0/S_AXI_HP0/HP0_DDR_LOWOCM] SEG_processing_system7_0_HP0_DDR_LOWOCM
