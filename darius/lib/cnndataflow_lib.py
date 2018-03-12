@@ -222,16 +222,9 @@ class CNNDataflow(object):
 		#for i in range(0, 64, 4):
 			#print(hex(cmd_mem.read(i)))
             
-	def read_ofm(self, ofm_baseaddr):
-		""" Read back convoluted OFM Volume from OFM physical address """
-		ofm_mem = MMIO(ofm_baseaddr, SIZE)
-		for i in range(0, ofm_offset, 4):
-			print(hex(ofm_mem.read(i)))
-            
 	def calc_efficiency(self, kernel_height, kernel_width, ifm_depth, hw_cycles):
 		num_of_calc = ofm_height*ofm_width*ofm_depth*kernel_height*kernel_width*ifm_depth
 		theoretical_cycles = num_of_calc/(C_NUM_OF_COLS*C_NUM_OF_ROWS)
 		efficiency = (theoretical_cycles/hw_cycles)*100
-		print("CNNDataflow IP cycles: %d, effciency: %.2f%%" % (hw_cycles, efficiency))        
-        
+		return float(efficiency)
             
