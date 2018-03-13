@@ -143,10 +143,10 @@ class CNNDataflow(object):
                 "1 to 16")
             return False
 
-        # The common strides are 0,1,2 and 4)
-        if (stride > 4 or (stride != 1 and stride % 2 != 0)):
+        # The common strides are 1,2 and 4)
+        if (stride > 4 or stride = 0 or (stride != 1 and stride % 2 != 0)):
             print("ERROR: THIS STRIDE IS NOT RECOMMENDED")
-            print("TIP: Make sure stride is either 0,1,2 and 4")
+            print("TIP: Make sure stride is either 1, 2 and 4")
             return False
 
         # The Number of Pad bits to be in range (0,16)
@@ -154,7 +154,7 @@ class CNNDataflow(object):
             print(
                 "ERROR: THE PADDED BITS ARE EITHER SMALLER/LARGER THAN "
                 "SUPPORTED")
-            print("TIP: Make sure Pad is in range from 1 to 16")
+            print("TIP: Make sure Pad is in range from 0 to 16")
             return False
 
         # The OFM Channels to be multiples of 8 and are in range (8,1024)
