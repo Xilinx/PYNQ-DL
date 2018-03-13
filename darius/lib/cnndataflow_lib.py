@@ -144,7 +144,7 @@ class CNNDataflow(object):
             return False
 
         # The common strides are 1,2 and 4)
-        if (stride > 4 or stride = 0 or (stride != 1 and stride % 2 != 0)):
+        if (stride > 4 or stride == 0 or (stride != 1 and stride % 2 != 0)):
             print("ERROR: THIS STRIDE IS NOT RECOMMENDED")
             print("TIP: Make sure stride is either 1, 2 and 4")
             return False
