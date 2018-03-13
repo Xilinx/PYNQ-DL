@@ -62,7 +62,7 @@ def fill_notebooks():
 
 # Images delivery
 def fill_images():
-    src_nb = GIT_DIR + '/images'
+    src_nb = GIT_DIR + '/notebooks/images'
     dst_nb_dir = '/home/xilinx/jupyter_notebooks/pynqDL/images'
     if os.path.exists(dst_nb_dir):
         shutil.rmtree(dst_nb_dir)
