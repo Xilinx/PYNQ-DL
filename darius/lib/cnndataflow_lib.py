@@ -120,16 +120,16 @@ class CNNDataflow(object):
             return False
 
         # The IFM depth to be multiples of 8 and are in range (8,1024)
-        if (ifm_depth <= 1024 or ifm_depth >= 8):
+        if (ifm_depth <= 512 or ifm_depth >= 8):
             if (ifm_depth % 8 != 0):
                 print(
                     "ERROR: THE IFM DEPTH NEEDS TO BE IN MULTIPLES OF 8 IN "
-                    "THE RANGE 8 TO 1024")
+                    "THE RANGE 8 TO 512")
                 return False
         else:
             print(
                 "ERROR: THE IFM DEPTH NEEDS TO BE IN MULTIPLES OF 8 IN THE "
-                "RANGE 8 TO 1024")
+                "RANGE 8 TO 512")
             return False
 
         # The Kernel demensions to be in range (1,16)
@@ -158,24 +158,24 @@ class CNNDataflow(object):
             return False
 
         # The OFM Channels to be multiples of 8 and are in range (8,1024)
-        if (ofm_depth <= 1024 or ofm_depth >= 8):
+        if (ofm_depth <= 512 or ofm_depth >= 8):
             if (ofm_depth % 8 != 0):
                 print(
                     "ERROR: THE NUMBER OF CHANNELS NEEDS TO BE IN MULTIPLES "
-                    "OF 8 IN THE RANGE 8 TO 1024")
+                    "OF 8 IN THE RANGE 8 TO 512")
                 return False
         else:
             print(
                 "ERROR: THE NUMBER OF CHANNELS NEEDS TO BE IN MULTIPLES OF "
-                "8 IN THE RANGE 8 TO 1024")
+                "8 IN THE RANGE 8 TO 512")
             return False
 
         # The accumulation loopback has 10 cycle delay
         if (ofm_height * ofm_width < 10):
             print("ERROR: THE OFM VOLUME IS SMALLER THAN SUPPORTED")
             print(
-                "TIP: If the IFM dimensions are in supported range, check "
-                "the kernel dimensions and other arguments")
+                "TIP: Manage the IFM dimensions, kernel dimensions and other"
+                "arguments such that ofm volume is of moderate size ")
             return False
 
         # The 2D dimensions are limited by BRAM chosen
@@ -183,15 +183,6 @@ class CNNDataflow(object):
                     1 << C_MAX_ADDR_WIDTH) or ofm_height * ofm_width > (
                     1 << C_MAX_ADDR_WIDTH)):
             print("ERROR: THE IFM/OFM PLANE DOES NOT FIT IN THE LINE BUFFER")
-            return False
-
-        if (ceil(log2(ifm_slices)) > C_MAX_ITER_WIDTH or ceil(
-                log2(ofm_slices)) > C_MAX_ITER_WIDTH):
-            print(
-                "ERROR: THE MAXIMUM ITERATION BITWIDTH IS SMALLER THAN GIVEN "
-                "IFM_SLICES/OFM_SLICES")
-            print(
-                "TIP: INCREASE THE \"C_MAX_ITER_WIDTH\" PARAMETER IF NECESSARY")
             return False
 
         # The max allowable block read (BTT) by the datamover is limited by 
