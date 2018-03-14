@@ -1,4 +1,4 @@
-# If GitHub fails to render .ipynb file, you can view them on nbviewer online
+# View slides in nbviewer online
 ## Steps to view slides in nbviewer online
 
 Open "<https://nbviewer.jupyter.org/>" in a new browser tab
