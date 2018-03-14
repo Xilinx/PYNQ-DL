@@ -1,6 +1,5 @@
-# View Slides Online
-
-__Note: File too large for GitHub to render__
+# If GitHub fails to render file, you can view them on nbviewer online
+## Steps to view slides in nbviewer online
 
 Open "<https://nbviewer.jupyter.org/>" in a new browser tab
 
