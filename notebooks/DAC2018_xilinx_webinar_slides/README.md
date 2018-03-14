@@ -2,7 +2,7 @@
 
 __Note: File too large for GitHub to render__
 
-Open "<https://nbviewer.jupyter.org/>"
+Open "<https://nbviewer.jupyter.org/>" in a new browser tab
 
 Paste  the following  URL in the form to render:
 
