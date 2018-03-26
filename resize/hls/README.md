@@ -19,6 +19,4 @@ The HLS top function is present in xf_resize_accel.cpp.
 
 ## Licenses
 
-**PYNQ** License : [BSD 3-Clause License](https://github.com/Xilinx/PYNQ/blob/master/LICENSE)
-
 **xfOpenCV** License : [BSD 3-Clause License](https://github.com/Xilinx/xfopencv/blob/master/LICENSE.txt)
