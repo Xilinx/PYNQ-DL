@@ -32,4 +32,4 @@ __author__ = ""
 __copyright__ = "Copyright 2018, Xilinx"
 __email__ = ""
 
-from .cnndataflow_lib import *
+from .darius_lib import *
