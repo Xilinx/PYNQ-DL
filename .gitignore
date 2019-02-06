@@ -40,3 +40,11 @@ __pycache__/
 ######################
 GNUmakefile
 user.props
+
+# JetBrains CLion Project Folder
+######################
+.idea
+
+# Gedit Swapfiles
+######################
+*~
