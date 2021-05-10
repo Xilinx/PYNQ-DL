@@ -1,4 +1,5 @@
-# PYNQ-DL
+🚫 This repository has been archived
+# PYNQ-DL (Legacy)
 ## Xilinx Deep Learning IP
 
 Quick Start
