@@ -1,4 +1,4 @@
-🚫 This repository has been archived
+# 🚫 This repository has been archived
 # PYNQ-DL (Legacy)
 ## Xilinx Deep Learning IP
 
